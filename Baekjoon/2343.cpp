@@ -17,53 +17,42 @@ typedef vector<pi> vii;
 const ll MOD = 1e9 + 7;
 const int stMAX = 1 << 18;
 const int INF = 1e9;
-int N, M, budget;
+int N, M, minute;
 
 int main() {
     ios_base::sync_with_stdio(0);
     cin.tie(0);
-
-    cin >> N;
+    cin >> N >> M;
 
     vi v;
+    int maxx = 0;
     for (int i = 0; i < N; i++) {
-        cin >> budget;
-        v.emplace_back(budget);
+        cin >> minute;
+        v.emplace_back(minute);
+
+        // 이거 안써서 틀렸네 ㅋㅋ
+        maxx = max(minute, maxx);
     }
 
-    cin >> M;
-
-    sort(v.begin(), v.end());
-
-    ll tmp = M;
-    for (int p : v) {
-        tmp -= p;
-    }
-
-    if (tmp >= 0) {
-        cout << v.back();
-        return 0;
-    }
-
-    int l = 0, h = M;
+    int l = maxx, h = 1'000'000'000;
     while (l <= h) {
         int m = l + h >> 1;
-        ll tmp = M;
 
+        int cnt = 1, sum = 0;
         for (int p : v) {
-            if (p <= m)
-                tmp -= p;
-            else {
-                tmp -= m;
+            if (sum + p > m) {
+                cnt++;
+                sum = 0;
             }
+            sum += p;
         }
 
-        if (tmp >= 0) {
+        if (cnt > M) {
             l = m + 1;
         } else {
             h = m - 1;
         }
     }
 
-    cout << l - 1;
+    cout << l;
 }

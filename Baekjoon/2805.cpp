@@ -17,52 +17,36 @@ typedef vector<pi> vii;
 const ll MOD = 1e9 + 7;
 const int stMAX = 1 << 18;
 const int INF = 1e9;
-int N, M, budget;
+int N, M, height;
 
 int main() {
     ios_base::sync_with_stdio(0);
     cin.tie(0);
 
-    cin >> N;
+    cin >> N >> M;
+    vi tree;
 
-    vi v;
     for (int i = 0; i < N; i++) {
-        cin >> budget;
-        v.emplace_back(budget);
+        cin >> height;
+        tree.emplace_back(height);
     }
 
-    cin >> M;
+    int l = 0, h = 1'000'000'000;
 
-    sort(v.begin(), v.end());
-
-    ll tmp = M;
-    for (int p : v) {
-        tmp -= p;
-    }
-
-    if (tmp >= 0) {
-        cout << v.back();
-        return 0;
-    }
-
-    int l = 0, h = M;
+    // binary search
     while (l <= h) {
         int m = l + h >> 1;
-        ll tmp = M;
 
-        for (int p : v) {
-            if (p <= m)
-                tmp -= p;
-            else {
-                tmp -= m;
-            }
+        ll sum = 0;
+        for (int p : tree) {
+            if (p > m)
+                sum += p - m;
         }
 
-        if (tmp >= 0) {
+        if (sum >= M) {
             l = m + 1;
-        } else {
+        } else
             h = m - 1;
-        }
     }
 
     cout << l - 1;
